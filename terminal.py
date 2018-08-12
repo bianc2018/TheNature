@@ -9,7 +9,6 @@ import numpy as np
 # 添加中文字体支持
 from matplotlib.font_manager import FontProperties
 font = FontProperties(fname=r"c:\windows\fonts\SimSun.ttc",size = 14)
-
 class Terminal:
     def __init__(self,title = 'terminal',h=512,w=512,fil=255):
         self.h = h
@@ -22,6 +21,20 @@ class Terminal:
         pass
     def updata(self):
         cv.imshow(self.title, self.bg)
+    def clear(self):
+        self.bg = np.zeros((self.h, self.w, 3), np.uint8)
+        self.bg.fill(self.fil)
+        self.updata()
+    def putText(self,text,pos):
+        cv.putText(self.bg, text, pos,cv.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0))
+    """
+        def vline(self,b,e,rbg,w):
+        vec = Vector(e[0]-b[0],e[1]-b[1])
+        dist = float(vec)
+        vec.normalize()
+        begin = Vector(b.x,b.y)
+        cv.line(self.bg, b, e, rbg,w)
+    """
     def close(self):
         cv.waitKey(0)
         cv.destroyAllWindows()
@@ -30,5 +43,6 @@ tm = Terminal()
 if __name__ == "__main__":
     t = Terminal()
     t.updata()
-    cv.waitKey(0)
+    while True:
+        print(cv.waitKey(0))
     t.close()

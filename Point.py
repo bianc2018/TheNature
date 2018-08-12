@@ -14,10 +14,11 @@ class Point:
         self.rgb = rgb
     def pos(self):
         return (self.x,self.y)
-    def display(self):
+    def filp(self):
         cv.circle(tm.bg,(int(self.x),int(self.y)),self.w,self.rgb,-1)
         tm.updata()
-
+    def display(self):
+        cv.circle(tm.bg,(int(self.x),int(self.y)),self.w,self.rgb,-1)
 import random
 
 class Walker(Point):
