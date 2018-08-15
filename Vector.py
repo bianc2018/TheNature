@@ -25,7 +25,6 @@ __int__(self) 实现到int的类型转换。
 __long__(self) 实现到long的类型转换。
 """
 import math
-from terminal import tm
 import cv2 as cv
 import random
 class Vector:
@@ -40,7 +39,7 @@ class Vector:
         else:
             self.x =  x
             self.y =  y
-    def Random(self,rx1=-255,rx2= 255,ry1=-255,ry2=255):
+    def Random(self,rx1=0,rx2= 50,ry1=0,ry2=50):
         return random.randint(rx1,rx2),random.randint(ry1,ry2)
     #向量加减
     def __add__(self, vec):
@@ -55,9 +54,14 @@ class Vector:
             return self.dot(vec)
         else:
             return Vector(self.x*vec,self.y*vec)
+    def __rmul__(self, other):
+        return self.__mul__(other)
     #向量点乘
     def dot(self,vec):
         return self.x*vec.x+self.y*vec.y
+    #取反 ~
+    def __invert__(self):
+        return Vector(-self.x,-self.y)
     #数值
     #长度
     def mag(self):
@@ -88,7 +92,10 @@ class Vector:
         return math.acos(dot/(sm*vm))
     #向量单位化
     def normalize(self):
-        return self//self.mag()
+        d = self.mag()
+        if d == 0:
+            return self
+        return self//d
     #输出
     def pos(self):
         return (self.x,self.y)
@@ -97,25 +104,23 @@ class Vector:
     def __float__(self):
         return self.mag()
     def __str__(self):
-        return f"Vector<{self.x},{self.y}>"
+        return f"<{self.x},{self.y}>"
     def __repr__(self):
-        return f"Vector<{self.x},{self.y}>"
+        return f"<{self.x},{self.y}>"
     def __setitem__(self, key, value):
         self.__dict__[key] = value
     def __getitem__(self, item):
         return self.__dict__[item]
     #画图
-    def display(self,obj,w=2):
-        dx = (obj[0]+self.x,obj[1])
-        dy = (obj[0], obj[1]+self.y)
-        dt = (obj[0]+self.x, obj[1]+self.y)
-        cv.line(tm.bg,obj,dt,(0,0,0),w)
-        cv.line(tm.bg, obj, dx, (0, 0, 0))
-        cv.line(tm.bg, obj, dy, (0, 0, 0))
-        cv.line(tm.bg, dx, dt, (0, 0, 0))
-        cv.line(tm.bg, dy, dt, (0, 0, 0))
-        cv.circle(tm.bg, obj, w, (255, 0, 0), -1)
+
+def vc( m1 ,v1 ,m2 ,v2 ):
+    m12 =  m1-m2
+    mv2 = 2*m2*v2
+    mv1 = 2*m1*v1
+    x = (m12*v1+mv2)//(m1+m2)
+    y = (-m12 * v2 + mv1) // (m1 + m2)
+    return x,y
 
 if __name__ == "__main__":
-    v1 = Vector()
-    print(v1)
+    v1 = Vector(10,-2)
+    print(~v1)
